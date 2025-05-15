@@ -33,11 +33,17 @@
 //#define CAMERA_MODEL_DFRobot_Romeo_ESP32S3 // Has PSRAM
 #include "camera_pins.h"
 
+// Set Core Log Level to Verbose
+#define LOG_LOCAL_LEVEL ESP_LOG_VERBOSE
+#include "esp_log.h"
+
 // ===========================
 // Enter your WiFi credentials
 // ===========================
-const char *ssid = "hsiofficeguest";
-const char *password = "$c!3nc3R0ck$";
+// const char *ssid = "hsiofficeguest";
+// const char *password = "$c!3nc3R0ck$";
+const char *ssid = "The Matrix";
+const char *password = "kr@nksh@ft";
 
 void startCameraServer();
 void setupLedFlash(int pin);
@@ -45,6 +51,12 @@ void setupLedFlash(int pin);
 void setup() {
   Serial.begin(115200);
   Serial.setDebugOutput(true);
+
+  // Set ESP-IDF log levels
+  esp_log_level_set("*", ESP_LOG_VERBOSE); // Log level for all tags
+  esp_log_level_set("camera_httpd", ESP_LOG_VERBOSE); // For our web server component
+  esp_log_level_set("httpd_parse", ESP_LOG_VERBOSE); // For HTTP parsing logs
+  esp_log_level_set("httpd_txrx", ESP_LOG_VERBOSE); // For HTTP send/receive logs
   Serial.println();
 
   camera_config_t config;
@@ -133,6 +145,7 @@ void setup() {
   setupLedFlash(LED_GPIO_NUM);
 #endif
 
+  Serial.println("Connecting to TheMatrix");
   WiFi.begin(ssid, password);
   WiFi.setSleep(false);
 

@@ -11,6 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+#include <Arduino.h> // Add this for Serial
 #include "esp_http_server.h"
 #include "esp_timer.h"
 #include "esp_camera.h"
@@ -392,6 +393,11 @@ static esp_err_t cmd_handler(httpd_req_t *req) {
     res = s->set_wb_mode(s, val);
   } else if (!strcmp(variable, "ae_level")) {
     res = s->set_ae_level(s, val);
+  } else if (!strcmp(variable, "tilt")) {
+    log_i("Tilt value received (log_i): %d", val);
+    Serial.printf("[app_httpd] Tilt value (Serial.printf): %d\n", val);
+    // Future: Add servo control code here, e.g., set_servo_tilt(val);
+    res = 0; // Indicate success
   }
 #if CONFIG_LED_ILLUMINATOR_ENABLED
   else if (!strcmp(variable, "led_intensity")) {
