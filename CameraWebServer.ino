@@ -1,6 +1,10 @@
 #include "esp_camera.h"
 #include <WiFi.h>
 
+#include <ESP32Servo.h>
+Servo myServo;
+const int servoPin = 44;
+
 //
 // WARNING!!! PSRAM IC required for UXGA resolution and high JPEG quality
 //            Ensure ESP32 Wrover Module or other board with PSRAM is selected
@@ -45,10 +49,16 @@
 const char *ssid = "The Matrix";
 const char *password = "kr@nksh@ft";
 
+
+
 void startCameraServer();
 void setupLedFlash(int pin);
 
 void setup() {
+
+  myServo.attach(servoPin);
+  servo_fun();
+
   Serial.begin(115200);
   Serial.setDebugOutput(true);
 
@@ -167,4 +177,15 @@ void setup() {
 void loop() {
   // Do nothing. Everything is done in another task by the web server
   delay(10000);
+}
+
+void servo_fun() {
+  for(int i = 30; i <= 150; i++) {
+    myServo.write(i);
+    delay(22);
+  }
+    for(int i = 150; i >= 30; i--) {
+    myServo.write(i);
+    delay(22);
+  }
 }
