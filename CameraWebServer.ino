@@ -46,8 +46,21 @@ const int servoPin = 44;
 // ===========================
 // const char *ssid = "hsiofficeguest";
 // const char *password = "$c!3nc3R0ck$";
-const char *ssid = "The Matrix";
-const char *password = "kr@nksh@ft";
+const char *ssid = "******";
+const char *password = "******";
+
+// Function to control the servo position
+extern "C" void setTiltServo(int angle) {
+  // Constrain angle to typical servo range (0-180 degrees)
+  if (angle < 0) {
+    angle = 0;
+  }
+  if (angle > 180) {
+    angle = 180;
+  }
+  myServo.write(angle);
+  Serial.printf("[Servo] Tilt set to: %d degrees\n", angle);
+}
 
 
 
@@ -57,7 +70,7 @@ void setupLedFlash(int pin);
 void setup() {
 
   myServo.attach(servoPin);
-  servo_fun();
+  myServo.write(90); // Set initial servo position to 90 degrees (center)
 
   Serial.begin(115200);
   Serial.setDebugOutput(true);
@@ -179,13 +192,4 @@ void loop() {
   delay(10000);
 }
 
-void servo_fun() {
-  for(int i = 30; i <= 150; i++) {
-    myServo.write(i);
-    delay(22);
-  }
-    for(int i = 150; i >= 30; i--) {
-    myServo.write(i);
-    delay(22);
-  }
-}
+

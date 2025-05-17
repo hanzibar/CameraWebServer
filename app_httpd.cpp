@@ -21,6 +21,8 @@
 #include "sdkconfig.h"
 #include "camera_index.h"
 
+extern "C" void setTiltServo(int angle);
+
 #if defined(ARDUINO_ARCH_ESP32) && defined(CONFIG_ARDUHAL_ESP_LOG)
 #include "esp32-hal-log.h"
 #endif
@@ -394,9 +396,10 @@ static esp_err_t cmd_handler(httpd_req_t *req) {
   } else if (!strcmp(variable, "ae_level")) {
     res = s->set_ae_level(s, val);
   } else if (!strcmp(variable, "tilt")) {
-    log_i("Tilt value received (log_i): %d", val);
-    Serial.printf("[app_httpd] Tilt value (Serial.printf): %d\n", val);
-    // Future: Add servo control code here, e.g., set_servo_tilt(val);
+    // The previous logging is now part of setTiltServo or can be re-enabled here if needed.
+    // log_i("Tilt value received (log_i): %d", val);
+    // Serial.printf("[app_httpd] Tilt value (Serial.printf): %d\n", val);
+    setTiltServo(val); // Call the servo control function
     res = 0; // Indicate success
   }
 #if CONFIG_LED_ILLUMINATOR_ENABLED
